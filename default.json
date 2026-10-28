@@ -15,8 +15,6 @@
         "lockFileMaintenance",
         "pin",
         "replacement",
-        "bump",
-        "lockfileUpdate",
         "rollback"
       ],
       "minimumReleaseAge": null
@@ -26,6 +24,12 @@
       "matchDepTypes": ["devDependencies"],
       "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
       "automerge": true
+    },
+    {
+      "description": "Pins skip the age gate, and without a parsed lockfile (e.g. bun.lock) pin to the newest in-range release. Hold automerge until that release is 3 days old.",
+      "matchUpdateTypes": ["pin"],
+      "matchCurrentAge": "< 3 days",
+      "automerge": false
     },
     {
       "description": "One automerged PR for all GitHub Actions updates, majors included.",
