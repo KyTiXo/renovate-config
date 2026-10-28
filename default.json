@@ -1,0 +1,38 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "Shared KyTiXo preset: 3-day release age gate, immediate security fixes, automerge only devDependencies and GitHub Actions after CI passes.",
+  "extends": ["config:best-practices", ":semanticCommits"],
+  "minimumReleaseAge": "3 days",
+  "platformAutomerge": false,
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "minimumReleaseAge": null
+  },
+  "packageRules": [
+    {
+      "description": "Skip the age gate for update types without release timestamps (mirrors security:minimumReleaseAgeNpm, for all datasources); otherwise they stay pending forever.",
+      "matchUpdateTypes": [
+        "lockFileMaintenance",
+        "pin",
+        "replacement",
+        "bump",
+        "lockfileUpdate",
+        "rollback"
+      ],
+      "minimumReleaseAge": null
+    },
+    {
+      "description": "Automerge non-major devDependencies once CI passes.",
+      "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "automerge": true
+    },
+    {
+      "description": "One automerged PR for all GitHub Actions updates, majors included.",
+      "matchManagers": ["github-actions"],
+      "groupName": "github-actions",
+      "separateMajorMinor": false,
+      "automerge": true
+    }
+  ]
+}
