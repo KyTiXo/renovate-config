@@ -1,6 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "description": "Shared KyTiXo preset: 3-day release age gate, immediate security fixes, automerge only devDependencies and GitHub Actions after CI passes.",
+  "description": "Shared KyTiXo preset: 3-day release age gate, immediate security fixes, automerge only non-major devDependencies and GitHub Actions after CI passes.",
   "extends": ["config:best-practices", ":semanticCommits"],
   "minimumReleaseAge": "3 days",
   "platformAutomerge": false,
@@ -32,12 +32,18 @@
       "automerge": false
     },
     {
-      "description": "One automerged PR for all GitHub Actions updates, majors included. Toolchain versions (uses-with), runners and container images stay manual.",
+      "description": "Group GitHub Actions updates and automerge them. Toolchain versions (uses-with), runners and container images stay manual.",
       "matchManagers": ["github-actions"],
       "matchDepTypes": ["action", "workflow"],
       "groupName": "github-actions",
-      "separateMajorMinor": false,
       "automerge": true
+    },
+    {
+      "description": "Action majors land in their own grouped PR for manual review: release/publish workflows are not exercised by PR CI.",
+      "matchManagers": ["github-actions"],
+      "matchDepTypes": ["action", "workflow"],
+      "matchUpdateTypes": ["major"],
+      "automerge": false
     }
   ]
 }
