@@ -1,0 +1,49 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "Shared KyTiXo preset: 3-day release age gate, immediate security fixes, automerge only non-major devDependencies and GitHub Actions after CI passes.",
+  "extends": ["config:best-practices", ":semanticCommits"],
+  "minimumReleaseAge": "3 days",
+  "platformAutomerge": false,
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "minimumReleaseAge": null
+  },
+  "packageRules": [
+    {
+      "description": "Skip the age gate for update types without release timestamps (mirrors security:minimumReleaseAgeNpm, for all datasources); otherwise they stay pending forever.",
+      "matchUpdateTypes": [
+        "lockFileMaintenance",
+        "pin",
+        "replacement",
+        "rollback"
+      ],
+      "minimumReleaseAge": null
+    },
+    {
+      "description": "Automerge non-major devDependencies once CI passes.",
+      "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "automerge": true
+    },
+    {
+      "description": "Pins skip the age gate, and without a parsed lockfile (e.g. bun.lock) pin to the newest in-range release. Hold automerge until that release is 3 days old.",
+      "matchUpdateTypes": ["pin"],
+      "matchCurrentAge": "< 3 days",
+      "automerge": false
+    },
+    {
+      "description": "Group GitHub Actions updates and automerge them. Toolchain versions (uses-with), runners and container images stay manual.",
+      "matchManagers": ["github-actions"],
+      "matchDepTypes": ["action", "workflow"],
+      "groupName": "github-actions",
+      "automerge": true
+    },
+    {
+      "description": "Action majors land in their own grouped PR for manual review: release/publish workflows are not exercised by PR CI.",
+      "matchManagers": ["github-actions"],
+      "matchDepTypes": ["action", "workflow"],
+      "matchUpdateTypes": ["major"],
+      "automerge": false
+    }
+  ]
+}
