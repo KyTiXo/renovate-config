@@ -32,8 +32,9 @@
       "automerge": false
     },
     {
-      "description": "One automerged PR for all GitHub Actions updates, majors included.",
+      "description": "One automerged PR for all GitHub Actions updates, majors included. Toolchain versions (uses-with), runners and container images stay manual.",
       "matchManagers": ["github-actions"],
+      "matchDepTypes": ["action", "workflow"],
       "groupName": "github-actions",
       "separateMajorMinor": false,
       "automerge": true
